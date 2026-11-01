@@ -9,8 +9,8 @@
       from var(--beam-offset),
       transparent 0%,
       transparent calc(100% - var(--beam-span) - var(--beam-span)),
-      rgb(183 165 255 / 0.15) calc(100% - var(--beam-span)),
-      rgb(183 165 255 / 0.95) 100%
+      rgb(250 204 21 / 0.15) calc(100% - var(--beam-span)),
+      rgb(250 204 21 / 0.95) 100%
     ) border-box;
   -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
