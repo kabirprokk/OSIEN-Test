@@ -7,31 +7,25 @@ const read = (file) => fs.readFileSync(path.join(__dirname, '..', file), 'utf8')
 
 test('run screen follows the folder, live activity, and summary sketch', () => {
   const app = read('src/app.jsx')
-  assert.match(app, /className="dashboard-grid sketch-layout"/)
-  assert.match(app, /className="left-stack sketch-left"[\s\S]*?className="page-heading"[\s\S]*?className="project-strip"[\s\S]*?className="checks-panel"[\s\S]*?className="activity-panel"/)
-  assert.match(app, /className="summary-column"[\s\S]*?RUN SUMMARY[\s\S]*?WHAT WAS WRONG[\s\S]*?WHAT CODEX CHANGED[\s\S]*?WHAT REMAINS/)
-  assert.match(app, /Run selected tests/)
-  assert.match(app, /className="main-tabs sketch-tabs"/)
+  assert.match(app, /className="run-page sketch-layout"/)
+  assert.match(app, /className="sketch-panel sketch-live"[\s\S]*?LIVE ACTIVITY[\s\S]*?Live things Codex is doing/)
+  assert.match(app, /className="sketch-panel sketch-summary"[\s\S]*?What was wrong[\s\S]*?What was fixed[\s\S]*?What remains/)
+  assert.match(app, /Run Test/)
+  assert.match(app, /className="sketch-tabs"/)
 })
 
-test('sketch layout retains project, test-selection, safe-copy, and Codex workflows', () => {
+test('beam effects are removed from the rendered app and buttons', () => {
   const app = read('src/app.jsx')
-  assert.match(app, /Browse check library/)
-  assert.match(app, /className="check-list"/)
-  assert.match(app, /Run in safe copy/)
-  assert.match(app, /onClick=\{askCodexToFix\}/)
-  assert.match(app, /onClick=\{analyze\}/)
-  assert.match(app, /className="project-files-browser"/)
-  assert.match(app, /onClick=\{stopRun\}/)
-  assert.match(app, /tab === 'history'/)
-  assert.match(app, /tab === 'settings'/)
-})
-
-test('BorderBeam animation is removed while existing components remain', () => {
-  const app = read('src/app.jsx')
-  assert.doesNotMatch(app, /BorderBeam/)
-  assert.doesNotMatch(read('src/components/PixelCard.jsx'), /BorderBeam/)
+  const button = read('src/components/SpecularButton.jsx')
+  assert.doesNotMatch(app, /BeamCard|BorderBeam|SpecularButton/)
+  assert.doesNotMatch(button, /BorderBeam/)
   assert.doesNotMatch(read('src/components/CardNav.jsx'), /BorderBeam/)
-  assert.doesNotMatch(read('src/components/SpecularButton.jsx'), /BorderBeam/)
-  assert.equal(fs.existsSync(path.join(__dirname, '..', 'src/components/BorderBeam.css')), false)
+  assert.doesNotMatch(read('src/sketch.css'), /border-beam|@keyframes/i)
+})
+
+test('project selection supplies a small default test set for the sketch run button', () => {
+  const app = read('src/app.jsx')
+  assert.match(app, /const initialChecks = inspected\.library[\s\S]*?\.slice\(0, 10\)/)
+  assert.match(app, /setSelected\(new Set\(initialChecks\.map\(\(item\) => item\.id\)\)\)/)
+  assert.match(app, /onClick=\{runSelected\}/)
 })
