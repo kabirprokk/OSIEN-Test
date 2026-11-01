@@ -3,7 +3,6 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { ArrowUpRight01Icon } from '@hugeicons/core-free-icons';
-import { BorderBeam } from './BorderBeam.jsx';
 import './CardNav.css';
 
 const THEMES = {
@@ -507,7 +506,6 @@ const CardNav = ({
                     </li>
                   ))}
                 </ul>
-                <BorderBeam size={48} transition={{ duration: 8 }} />
               </div>
             ))}
           </div>

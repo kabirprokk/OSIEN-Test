@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 
 import './PixelCard.css';
-import { BorderBeam } from './BorderBeam.jsx';
 
 const VARIANTS = {
   default: {
@@ -586,7 +585,6 @@ export default function PixelCard({
       tabIndex={focusOff ? -1 : 0}
     >
       <canvas className="pixel-card-canvas" ref={canvasRef} aria-hidden="true" />
-      <BorderBeam size={40} initialOffset={20} className="from-transparent via-yellow-500 to-transparent" transition={{ type: 'spring', stiffness: 60, damping: 20 }} />
       {children}
     </div>
   );
