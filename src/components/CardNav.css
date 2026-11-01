@@ -251,6 +251,10 @@
   will-change: transform, opacity;
 }
 
+.card-nav__card > :not(.border-beam) {
+  position: relative;
+  z-index: 1;
+}
 
 .card-nav[data-narrow] .card-nav__card {
   flex: none;
