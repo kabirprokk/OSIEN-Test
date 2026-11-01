@@ -62,7 +62,7 @@
   pointer-events: none;
 }
 
-.pixel-card > :not(.pixel-card-canvas) {
+.pixel-card > :not(.pixel-card-canvas):not(.border-beam) {
   position: relative;
   z-index: 1;
 }

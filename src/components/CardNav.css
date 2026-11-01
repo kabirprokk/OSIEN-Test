@@ -234,6 +234,7 @@
 
 .card-nav__card {
   position: relative;
+  overflow: hidden;
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
@@ -248,6 +249,11 @@
   color: var(--cn-text);
   transform-origin: 50% 0;
   will-change: transform, opacity;
+}
+
+.card-nav__card > :not(.border-beam) {
+  position: relative;
+  z-index: 1;
 }
 
 .card-nav[data-narrow] .card-nav__card {
