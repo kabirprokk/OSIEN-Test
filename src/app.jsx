@@ -5,7 +5,8 @@ import { FolderOpenIcon, PlayIcon, SparklesIcon, Shield01Icon, ArrowRight01Icon,
 import CallChip from './components/CallChip.jsx'
 import LatticeLoader from './components/LatticeLoader.jsx'
 import ThoughtLine from './components/ThoughtLine.jsx'
-import PixelCard from './components/PixelCard.jsx'
+import BeamCard from './components/BeamCard.jsx'
+import { BorderBeam } from './components/BorderBeam.jsx'
 import SpecularButton from './components/SpecularButton.jsx'
 import DecryptedText from './components/DecryptedText.jsx'
 import CardNav from './components/CardNav.jsx'
@@ -23,25 +24,6 @@ const getPlan = (text) => {
 }
 const codexBlocked = (text) => /(?:blocked|rejected|denied).{0,80}(?:execution policy|project files|workspace)|(?:execution policy|workspace policy).{0,80}(?:blocked|rejected|denied)|session (?:also )?prohibits? writes|could not inspect code|files changed:\s*none[\s\S]{0,240}tests run:\s*none/i.test(text)
 const escapeText = (value) => String(value ?? '')
-const pixelCardProps = {
-  colors: ['#f8fafc', '#f1f5f9', '#cbd5e1'],
-  glowColor: '#cbd5e1',
-  shape: 'square',
-  origin: 'center',
-  gap: 5,
-  pixelSize: 2,
-  speed: 35,
-  revealDuration: 600,
-  spotlight: 0.5,
-  glow: 0.5,
-  opacity: 0.35,
-  fade: 0.7,
-  trigger: 'hover',
-  radius: 24,
-  clickPulse: true,
-  intro: true,
-  theme: 'dark',
-}
 const specularButtonProps = {
   size: 'sm',
   radius: 8,
@@ -68,7 +50,7 @@ function ConfirmDialog({ value, onAnswer }) {
     if (!value && dialog?.open) dialog.close()
   }, [value])
   return <dialog ref={ref} className="confirm-dialog" onCancel={(event) => { event.preventDefault(); onAnswer(false) }}>
-    {value && <div className="confirm-surface"><span className="eyebrow">PLEASE CONFIRM</span><h2>{value.title}</h2><p>{value.message}</p><div className="confirm-actions"><SpecularButton {...specularButtonProps} className="button secondary" autoFocus onClick={() => onAnswer(false)}>Cancel</SpecularButton><SpecularButton {...specularButtonProps} className="button primary" onClick={() => onAnswer(true)}>{value.confirmLabel || 'Continue'}</SpecularButton></div></div>}
+    {value && <div className="confirm-surface"><span className="eyebrow">PLEASE CONFIRM</span><h2>{value.title}</h2><p>{value.message}</p><div className="confirm-actions"><SpecularButton {...specularButtonProps} className="button secondary" autoFocus onClick={() => onAnswer(false)}>Cancel</SpecularButton><SpecularButton {...specularButtonProps} className="button primary" onClick={() => onAnswer(true)}>{value.confirmLabel || 'Continue'}</SpecularButton></div><BorderBeam size={60} transition={{ duration: 8 }} /></div>}
   </dialog>
 }
 
@@ -273,18 +255,18 @@ function App() {
     {tab === 'run' && <main id="top" className="run-page">
       <section className="page-heading"><div><div className="eyebrow">PROJECT QUALITY</div><h1><DecryptedText text="Run Tests" animateOn="inViewHover" effect="scramble" sequential revealDirection="start" speed={40} maxIterations={8} hoverRadius={80} scrambleColor="#b7a5ff" /></h1><p>Choose a project, run focused checks, review what needs attention.</p></div><SpecularButton {...specularButtonProps} className="button secondary choose-button" onClick={chooseProject}><HugeiconsIcon icon={FolderOpenIcon} size={16} />{project ? 'Change project' : 'Choose project'}</SpecularButton></section>
 
-      <PixelCard {...pixelCardProps} className="project-strip">
+      <BeamCard className="project-strip">
         <span className="project-icon"><HugeiconsIcon icon={FolderOpenIcon} size={21} /></span>
         <div className="project-details"><span className="eyebrow">ACTIVE PROJECT</span><strong>{project?.name ?? 'No project selected'}</strong><small>{project?.directory ?? 'Choose a local folder to begin'}</small></div>
         {project && <div className="project-facts"><span>{project.fileCount.toLocaleString()} files</span><i />{project.extensions.slice(0, 5).map((ext) => <span key={ext}>{ext.toUpperCase()}</span>)}</div>}
         {!project && <SpecularButton {...specularButtonProps} className="button primary" onClick={chooseProject}>Choose folder <HugeiconsIcon icon={ArrowRight01Icon} size={15} /></SpecularButton>}
-      </PixelCard>
+      </BeamCard>
 
-      {project && <details className="project-files-browser"><summary><span>Browse project files</span><span>{project.fileCount.toLocaleString()} files</span></summary><div className="project-files-content"><input className="project-file-search" value={fileQuery} onChange={(event) => setFileQuery(event.target.value)} placeholder="Filter files in this folder" aria-label="Filter project files" /><LineSidebar items={visibleProjectFiles} accentColor="#b7a5ff" textColor="#b8bdc9" markerColor="#454052" showIndex showMarker proximityRadius={100} maxShift={12} markerLength={26} itemGap={12} fontSize={0.76} onItemClick={(_index, file) => setActiveFile(file)} className="project-file-sidebar" />{visibleProjectFiles.length === 0 && <p className="empty-message">No matching files.</p>}{(project.files?.length ?? 0) > 120 && <small className="list-limit">Showing up to 120 matches. Filter to find other files.</small>}{activeFile && <small className="active-file-path">Selected: {activeFile}</small>}</div></details>}
+      {project && <details className="project-files-browser"><summary><span>Browse project files</span><span>{project.fileCount.toLocaleString()} files</span></summary><div className="project-files-content"><input className="project-file-search" value={fileQuery} onChange={(event) => setFileQuery(event.target.value)} placeholder="Filter files in this folder" aria-label="Filter project files" /><LineSidebar items={visibleProjectFiles} accentColor="#b7a5ff" textColor="#b8bdc9" markerColor="#454052" showIndex showMarker proximityRadius={100} maxShift={12} markerLength={26} itemGap={12} fontSize={0.76} onItemClick={(_index, file) => setActiveFile(file)} className="project-file-sidebar" />{visibleProjectFiles.length === 0 && <p className="empty-message">No matching files.</p>}{(project.files?.length ?? 0) > 120 && <small className="list-limit">Showing up to 120 matches. Filter to find other files.</small>}{activeFile && <small className="active-file-path">Selected: {activeFile}</small>}</div><BorderBeam size={60} transition={{ duration: 8 }} /></details>}
 
       <div className="dashboard-grid">
         <section className="left-stack">
-          <PixelCard {...pixelCardProps} className="checks-panel">
+          <BeamCard className="checks-panel">
             <div className="panel-head"><div><div className="eyebrow">TEST PLAN</div><h2>Checks to run</h2><p>{project ? `${project.applicable} checks apply to this project` : 'Choose a project to find relevant checks'}</p></div><span className="selected-count">{selected.size} selected</span></div>
             <details className="library-browser"><summary><span>Browse check library</span><span className="summary-plus">＋</span></summary>
               <div className="filter-row"><label className="search-box"><HugeiconsIcon icon={Search01Icon} size={15} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Find a check" /></label><select value={bundle} onChange={(event) => setBundle(event.target.value)} aria-label="Check category"><option value="all">All checks</option>{bundles.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}<option value="commands">Project commands</option></select></div>
@@ -293,9 +275,9 @@ function App() {
               {catalog.length > 120 && <small className="list-limit">Showing the first 120 matches. Search to narrow the list.</small>}
             </details>
             <div className="run-bar"><SquishSwitch checked={isolate} onChange={(value) => { setIsolate(value); localStorage.setItem('osien-isolate', JSON.stringify(value)) }} label="Run in safe copy" ariaLabel="Run tests in a safe copy" trackColor="#26232e" trackOnColor="#b7a5ff" width={48} height={26} radius={13} stretch={30} hoverScale={1.03} /><div className="action-buttons">{busy === 'tests' && <SpecularButton {...specularButtonProps} className="button subtle stop" onClick={stopRun}>Stop</SpecularButton>}{busy === 'tests' ? <SpecularButton {...specularButtonProps} className="button primary" disabled><LatticeLoader status="working" label="Running" showTimer={false} /></SpecularButton> : <SpecularButton {...specularButtonProps} className="button primary run-button" disabled={!project || !selected.size || Boolean(busy)} onClick={runSelected}><HugeiconsIcon icon={PlayIcon} size={16} />Run selected tests</SpecularButton>}</div></div>
-          </PixelCard>
+          </BeamCard>
 
-          <PixelCard {...pixelCardProps} className="activity-panel">
+          <BeamCard className="activity-panel">
             <div className="activity-top"><div><div className="eyebrow">LIVE ACTIVITY</div><h2>{busy === 'analyze' ? 'Planning a focused run' : busy === 'fix' ? 'Investigating findings' : busy === 'tests' ? 'Running checks' : 'What OSIEN is doing'}</h2></div><LatticeLoader status={busy ? 'working' : status === 'error' ? 'error' : status === 'ready' ? 'idle' : 'done'} label={busy ? 'In progress' : status === 'ready' ? 'Ready' : status === 'review' ? 'Report ready · not verified' : status === 'error' ? 'Needs attention' : 'Complete'} pattern="orbit" /></div>
             {busy === 'analyze' || busy === 'fix' ? <ThoughtLine working label={busy === 'analyze' ? 'Building a focused test plan' : 'Reviewing the reported issues'} steps={busy === 'analyze' ? ['Reading project snapshot', 'Selecting relevant checks'] : ['Inspecting failure context', 'Preparing a minimal change']} /> : null}
             {activeCall && busy !== 'tests' && <CallChip name={activeCall.name} argument={activeCall.argument} status="running" />}
@@ -303,11 +285,11 @@ function App() {
             {!busy && status === 'review' && <p className="review-next-step">Codex review finished. Open <strong>Review Codex report</strong> in the summary, then rerun checks to verify any changes.</p>}
             {!busy && !results.length && status !== 'review' && <p className="activity-empty">Select checks and run them to see real-time progress here.</p>}
             {(output || aiStream) && <details className="activity-output" open={!busy && ['review', 'error'].includes(status)}><summary>{busy?.startsWith('analy') || busy === 'fix' ? 'Codex stream' : 'Process output'} <span>{output.length + aiStream.length > 0 ? `${(output + aiStream).length.toLocaleString()} chars` : ''}</span></summary><pre>{aiStream || output}</pre></details>}
-          </PixelCard>
+          </BeamCard>
         </section>
 
         <aside className="summary-column">
-          <PixelCard {...pixelCardProps} className="summary-panel">
+          <BeamCard className="summary-panel">
             <div className="eyebrow">RUN SUMMARY</div><h2>{status === 'review' && !results.length ? 'Codex report ready' : results.length ? status === 'error' ? 'Needs attention' : findings.length || failed.length ? 'Review recommended' : 'All clear' : 'Ready when you are'}</h2>
             <p className="summary-intro">{status === 'review' && !results.length ? `Codex finished for ${project?.name ?? 'your project'}; any changes are unverified.` : results.length ? `${results.length} checks completed for ${project?.name ?? 'your project'}.` : 'Your results will appear here after the run.'}</p>
             {results.length > 0 && <div className="summary-metrics"><div><strong>{passed}</strong><span>Passed</span></div><div><strong>{findings.length}</strong><span>Findings</span></div><div><strong>{failed.length}</strong><span>Failures</span></div></div>}
@@ -316,15 +298,15 @@ function App() {
             <div className="summary-section"><span className="summary-label"><HugeiconsIcon icon={ArrowRight01Icon} size={14} />WHAT REMAINS</span><p>{findings.length || failed.length ? `${findings.length + failed.length} item${findings.length + failed.length === 1 ? '' : 's'} need review. Rerun checks after changes.` : status === 'review' ? 'Review the Codex report and rerun checks to verify changes.' : results.length ? 'Review the output and your own test coverage.' : 'Choose a project and select checks.'}</p></div>
             <SpecularButton {...specularButtonProps} className="button ai-button" disabled={!project || Boolean(busy)} onClick={askCodexToFix}><HugeiconsIcon icon={SparklesIcon} size={16} />{busy === 'fix' ? 'Codex is investigating…' : codexConnected ? 'Ask Codex to review again' : 'Ask Codex to investigate'}</SpecularButton>
             <SpecularButton {...specularButtonProps} className="text-ai" disabled={!project || Boolean(busy)} onClick={analyze}>Suggest a focused test plan <HugeiconsIcon icon={ArrowRight01Icon} size={14} /></SpecularButton>
-          </PixelCard>
+          </BeamCard>
           <p className="privacy-note"><HugeiconsIcon icon={Shield01Icon} size={13} /> Tests run locally. Codex only receives a snapshot after you confirm.</p>
         </aside>
       </div>
     </main>}
 
-    {tab === 'history' && <main className="simple-page"><div className="eyebrow">LOCAL RUNS</div><h1>History</h1><p className="page-lede">Your recent runs, saved on this device.</p><div className="history-list">{history.length ? history.map((item, index) => <article className="history-row" key={`${item.at}-${index}`}><span className="history-status"><HugeiconsIcon icon={item.failed ? Alert01Icon : Tick02Icon} size={17} /></span><div><strong>{item.project?.split(/[\\/]/).at(-1) || 'Project'}</strong><small>{new Date(item.at).toLocaleString()} · {item.count} checks · {item.passed} passed · {item.failed} to review</small></div><span className="history-result">{item.failed ? 'Review' : 'Complete'}</span></article>) : <div className="empty-state">No test runs yet.</div>}</div><SpecularButton {...specularButtonProps} className="button primary" onClick={() => setTab('run')}>Back to Run Tests</SpecularButton></main>}
+    {tab === 'history' && <main className="simple-page"><div className="eyebrow">LOCAL RUNS</div><h1>History</h1><p className="page-lede">Your recent runs, saved on this device.</p><div className="history-list">{history.length ? history.map((item, index) => <article className="history-row" key={`${item.at}-${index}`}><span className="history-status"><HugeiconsIcon icon={item.failed ? Alert01Icon : Tick02Icon} size={17} /></span><div><strong>{item.project?.split(/[\\/]/).at(-1) || 'Project'}</strong><small>{new Date(item.at).toLocaleString()} · {item.count} checks · {item.passed} passed · {item.failed} to review</small></div><span className="history-result">{item.failed ? 'Review' : 'Complete'}</span><BorderBeam size={60} transition={{ duration: 8 }} /></article>) : <div className="empty-state">No test runs yet.</div>}</div><SpecularButton {...specularButtonProps} className="button primary" onClick={() => setTab('run')}>Back to Run Tests</SpecularButton></main>}
 
-    {tab === 'settings' && <main className="simple-page"><div className="eyebrow">PREFERENCES</div><h1><DecryptedText text="Settings" animateOn="inViewHover" effect="scramble" sequential revealDirection="start" speed={40} maxIterations={8} hoverRadius={80} scrambleColor="#b7a5ff" /></h1><p className="page-lede">Keep runs safe and decide what leaves your device.</p><PixelCard {...pixelCardProps} className="settings-card"><div className="setting-row"><div><strong>Run tests in a safe copy</strong><p>Copy the project to a temporary folder before running selected checks.</p></div><SquishSwitch checked={isolate} onChange={(value) => { setIsolate(value); localStorage.setItem('osien-isolate', JSON.stringify(value)) }} ariaLabel="Run tests in a safe copy" trackColor="#26232e" trackOnColor="#b7a5ff" width={52} height={28} radius={14} stretch={30} /></div><div className="setting-row"><div><strong>Codex connection</strong><p>{codex.text}</p></div><span className="codex-pill"><HugeiconsIcon icon={SparklesIcon} size={12} />{codex.signedIn ? 'Connected' : codex.available ? 'Sign-in required' : 'Unavailable'}</span></div><div className="setting-row"><div><strong>Project snapshot</strong><p>AI planning shares a bounded, redacted project snapshot only after you approve.</p></div><HugeiconsIcon icon={Shield01Icon} size={18} /></div></PixelCard></main>}
+    {tab === 'settings' && <main className="simple-page"><div className="eyebrow">PREFERENCES</div><h1><DecryptedText text="Settings" animateOn="inViewHover" effect="scramble" sequential revealDirection="start" speed={40} maxIterations={8} hoverRadius={80} scrambleColor="#b7a5ff" /></h1><p className="page-lede">Keep runs safe and decide what leaves your device.</p><BeamCard className="settings-card"><div className="setting-row"><div><strong>Run tests in a safe copy</strong><p>Copy the project to a temporary folder before running selected checks.</p></div><SquishSwitch checked={isolate} onChange={(value) => { setIsolate(value); localStorage.setItem('osien-isolate', JSON.stringify(value)) }} ariaLabel="Run tests in a safe copy" trackColor="#26232e" trackOnColor="#b7a5ff" width={52} height={28} radius={14} stretch={30} /></div><div className="setting-row"><div><strong>Codex connection</strong><p>{codex.text}</p></div><span className="codex-pill"><HugeiconsIcon icon={SparklesIcon} size={12} />{codex.signedIn ? 'Connected' : codex.available ? 'Sign-in required' : 'Unavailable'}</span></div><div className="setting-row"><div><strong>Project snapshot</strong><p>AI planning shares a bounded, redacted project snapshot only after you approve.</p></div><HugeiconsIcon icon={Shield01Icon} size={18} /></div></BeamCard></main>}
 
     <footer className="app-footer"><span>OSIEN TEST</span><span><i />LOCAL BY DEFAULT</span></footer>
     <ConfirmDialog value={confirmation} onAnswer={answer} />

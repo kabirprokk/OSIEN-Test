@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { BorderBeam } from './BorderBeam.jsx';
 
 import './SpecularButton.css';
 
@@ -448,6 +449,7 @@ const SpecularButton = ({
     >
       <canvas ref={canvasRef} className="specular-button__light" aria-hidden="true" />
       <span className="specular-button__label">{children}</span>
+      <BorderBeam size={40} initialOffset={20} transition={{ duration: 8 }} />
     </button>
   );
 };
