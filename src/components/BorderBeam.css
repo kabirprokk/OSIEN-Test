@@ -1,0 +1,35 @@
+.border-beam {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background: conic-gradient(
+      from var(--beam-offset),
+      transparent 0%,
+      transparent calc(100% - var(--beam-span) - var(--beam-span)),
+      rgb(250 204 21 / 0.15) calc(100% - var(--beam-span)),
+      rgb(250 204 21 / 0.95) 100%
+    ) border-box;
+  -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: border-beam-spin var(--beam-duration, 6s) linear var(--beam-delay, 0s) infinite;
+}
+
+@keyframes border-beam-spin {
+  to { --beam-offset: 380deg; }
+}
+
+@property --beam-offset {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 20deg;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .border-beam { animation: none; }
+}

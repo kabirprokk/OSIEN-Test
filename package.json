@@ -1,0 +1,26 @@
+{
+  "name": "osien-test",
+  "version": "0.1.0",
+  "description": "AI-guided, isolated project testing for Windows",
+  "main": "src/main.cjs",
+  "scripts": {
+    "start": "npm run build && electron .",
+    "build": "vite build",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "electron": "^42.11.18",
+    "vite": "^8.3.5"
+  },
+  "allowScripts": {
+    "electron@42.11.18": true
+  },
+  "dependencies": {
+    "@hugeicons/core-free-icons": "^4.4.0",
+    "@hugeicons/react": "^1.1.10",
+    "motion": "^14.9.0",
+    "ogl": "^1.0.11",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  }
+}
